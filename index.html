@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Visit Ready — City of Pharr</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0D1D41;--gold:#D4A853;--gold2:#F3C300;
+  --green:#00C853;--red:#FF1744;--amber:#FF8F00;
+  --bg:#07101F;--border:rgba(212,168,83,.2);
+}
+body{background:var(--bg);color:#fff;font-family:'Barlow',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── HEADER ── */
+.hdr{background:var(--navy);border-bottom:3px solid var(--gold);padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(16px,2.5vw,22px);color:#fff;letter-spacing:.04em;}
+.hdr-title span{color:var(--gold);}
+.hdr-right{display:flex;align-items:center;gap:12px;}
+.overall-pill{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:.1em;padding:5px 12px;border-radius:20px;background:rgba(212,168,83,.12);border:1px solid var(--border);color:var(--gold);}
+.reset-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);
+  font-size:12px;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'Barlow',sans-serif;}
+.reset-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ── TITLE ── */
+.title-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;gap:20px;}
+.title-badge{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;}
+.title-main{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(42px,8vw,80px);line-height:.95;color:#fff;}
+.title-main span{color:var(--gold);}
+.title-sub{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.5);max-width:540px;line-height:1.6;}
+.title-dates{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.date-chip{background:rgba(212,168,83,.1);border:1px solid var(--border);border-radius:6px;padding:10px 20px;text-align:center;}
+.date-chip .dc-label{font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:2px;}
+.date-chip .dc-date{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:#fff;}
+.date-chip .dc-cd{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+.mode-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.mode-btn{padding:14px 32px;border:none;border-radius:8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:17px;letter-spacing:.1em;transition:all .12s;}
+.mode-btn.primary{background:var(--gold);color:var(--navy);}
+.mode-btn.primary:hover{background:var(--gold2);}
+.mode-btn.secondary{background:rgba(255,255,255,.08);color:#fff;border:2px solid rgba(255,255,255,.2);}
+.mode-btn.secondary:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── CATEGORY SCREEN ── */
+.cat-screen-inner{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1100px;margin:0 auto;width:100%;}
+.cat-screen-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.cat-screen-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.4);text-transform:uppercase;}
+.spin-btn{background:var(--gold);color:var(--navy);border:none;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;letter-spacing:.1em;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .12s;}
+.spin-btn:hover{background:var(--gold2);}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.cat-tile{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:18px 20px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.cat-tile:hover{border-color:var(--gold);background:rgba(212,168,83,.08);transform:translateY(-2px);}
+.ct-icon{font-size:28px;margin-bottom:8px;line-height:1;}
+.ct-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(16px,2vw,20px);color:#fff;margin-bottom:4px;}
+.ct-count{font-size:12px;color:rgba(255,255,255,.4);}
+.ct-prog{margin-top:10px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;}
+.ct-progf{height:100%;border-radius:2px;transition:width .4s;background:rgba(255,255,255,.25);}
+.cat-tile.all-done .ct-progf{background:var(--green);}
+.cat-tile.some-done .ct-progf{background:var(--amber);}
+.ct-status{position:absolute;top:10px;right:12px;font-size:14px;}
+.progress-summary{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ps-label{font-size:13px;color:rgba(255,255,255,.5);}
+.ps-bar{flex:1;min-width:120px;height:8px;background:rgba(255,255,255,.1);border-radius:4px;}
+.ps-barf{height:100%;border-radius:4px;background:var(--gold);transition:width .5s;}
+.ps-pct{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:var(--gold);}
+
+/* ── QUESTION SCREEN ── */
+.q-screen-inner{flex:1;display:flex;flex-direction:column;padding:20px 24px;max-width:860px;margin:0 auto;width:100%;gap:14px;}
+.q-back{background:transparent;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif;display:flex;align-items:center;gap:6px;padding:0;letter-spacing:.04em;}
+.q-back:hover{color:var(--gold);}
+.q-cat-badge{display:flex;align-items:center;gap:10px;}
+.q-cat-icon{font-size:22px;}
+.q-cat-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;}
+.q-cat-prog{font-size:12px;color:rgba(255,255,255,.35);}
+.q-card{background:linear-gradient(160deg,#0D1D41 0%,#08111f 100%);border:2px solid var(--border);border-radius:12px;padding:clamp(20px,4vw,36px);flex:1;display:flex;flex-direction:column;gap:14px;}
+.q-num{font-size:11px;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;}
+.q-text{font-size:clamp(22px,3.5vw,32px);font-weight:700;line-height:1.4;color:#fff;}
+
+/* ── TOGGLES ── */
+.toggle-row{display:flex;gap:8px;flex-wrap:wrap;}
+.info-toggle{background:transparent;border:1px solid;font-family:'Barlow',sans-serif;font-size:13px;
+  padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:6px;width:fit-content;}
+.info-toggle.tip-tog{border-color:rgba(212,168,83,.3);color:rgba(212,168,83,.7);}
+.info-toggle.tip-tog:hover,.info-toggle.tip-tog.open{border-color:var(--gold);color:var(--gold);background:rgba(212,168,83,.06);}
+.info-toggle.fac-tog{border-color:rgba(100,160,255,.3);color:rgba(100,160,255,.7);}
+.info-toggle.fac-tog:hover,.info-toggle.fac-tog.open{border-color:#64A0FF;color:#64A0FF;background:rgba(100,160,255,.06);}
+
+.info-panel{display:none;border-radius:0 6px 6px 0;padding:14px 16px;}
+.info-panel.show{display:block;}
+.tip-panel{background:rgba(212,168,83,.07);border-left:3px solid var(--gold);}
+.fac-panel{background:rgba(100,160,255,.06);border-left:3px solid #64A0FF;}
+.panel-label{font-size:10px;letter-spacing:.2em;font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+.tip-panel .panel-label{color:var(--gold);}
+.fac-panel .panel-label{color:#64A0FF;}
+.panel-text{font-size:14px;line-height:1.75;color:rgba(255,255,255,.75);}
+
+/* ── ACTIONS ── */
+.q-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;}
+.q-btn{padding:14px;border:none;border-radius:8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:.08em;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.q-btn.confident{background:rgba(0,200,83,.15);border:2px solid var(--green);color:var(--green);}
+.q-btn.confident:hover{background:rgba(0,200,83,.25);}
+.q-btn.keep-going{background:rgba(255,143,0,.12);border:2px solid var(--amber);color:var(--amber);}
+.q-btn.keep-going:hover{background:rgba(255,143,0,.22);}
+
+/* ── NAV ── */
+.q-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.q-nav-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.08em;padding:8px 18px;border-radius:5px;cursor:pointer;transition:all .12s;}
+.q-nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.q-dots{display:flex;gap:6px;align-items:center;}
+.qdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .2s;}
+.qdot.current{background:var(--gold);transform:scale(1.3);}
+.qdot.done-g{background:var(--green);}
+.qdot.done-a{background:var(--amber);}
+
+/* ── SPIN OVERLAY ── */
+.spin-overlay{position:fixed;inset:0;background:rgba(7,16,31,.93);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:24px;text-align:center;}
+.spin-overlay.show{display:flex;}
+.spin-icon{font-size:72px;animation:spinIcon .6s ease-out;}
+@keyframes spinIcon{from{transform:rotate(-180deg) scale(.5);opacity:0;}to{transform:rotate(0) scale(1);opacity:1;}}
+.spin-cat{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(24px,5vw,44px);color:var(--gold);animation:spinFade .5s ease-out .1s both;}
+@keyframes spinFade{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.spin-q{font-size:clamp(17px,2.5vw,24px);color:rgba(255,255,255,.85);max-width:600px;line-height:1.5;animation:spinFade .5s ease-out .25s both;}
+.spin-go{background:var(--gold);color:var(--navy);border:none;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:.12em;padding:13px 40px;border-radius:6px;cursor:pointer;animation:spinFade .5s ease-out .4s both;}
+.spin-go:hover{background:var(--gold2);}
+
+/* ── DONE ── */
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;gap:16px;}
+.done-emoji{font-size:64px;}
+.done-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(32px,5vw,52px);color:#fff;}
+.done-title span{color:var(--gold);}
+.done-sub{font-size:16px;color:rgba(255,255,255,.5);max-width:480px;line-height:1.6;}
+.done-grid{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:640px;}
+.done-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:10px 14px;text-align:center;min-width:130px;}
+.done-chip.all-g{border-color:var(--green);background:rgba(0,200,83,.08);}
+.done-chip.all-a{border-color:var(--amber);background:rgba(255,143,0,.08);}
+.dc-cat{font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:3px;}
+.dc-pct{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;}
+.all-g .dc-pct{color:var(--green);}
+.all-a .dc-pct{color:var(--amber);}
+
+@media(max-width:580px){
+  .q-actions{grid-template-columns:1fr;}
+  .mode-row{flex-direction:column;align-items:stretch;}
+  .toggle-row{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-title">Site Visit <span>Ready</span></div>
+  <div class="hdr-right">
+    <div class="overall-pill" id="overall-pill">0 / 23 practiced</div>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="screen active" id="sTITLE">
+  <div class="title-wrap">
+    <div class="title-badge">City of Pharr · OSE · Baldrige 2026</div>
+    <div class="title-main">Site Visit<br><span>Ready</span></div>
+    <div class="title-sub">Practice the conversations Baldrige examiners will have with your employees — before they happen.</div>
+    <div class="title-dates">
+      <div class="date-chip">
+        <div class="dc-label">🖥 Virtual Site Visit</div>
+        <div class="dc-date">Sep 28, 2026</div>
+        <div class="dc-cd" id="cd-v">—</div>
+      </div>
+      <div class="date-chip">
+        <div class="dc-label">🏛 On-Site Visit</div>
+        <div class="dc-date">Oct 20, 2026</div>
+        <div class="dc-cd" id="cd-o">—</div>
+      </div>
+    </div>
+    <div class="mode-row">
+      <button class="mode-btn primary" onclick="showCats()">Browse by Category →</button>
+      <button class="mode-btn secondary" onclick="spinRandom()">🎲 Random Hot Seat</button>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="screen" id="sCATS">
+  <div class="cat-screen-inner">
+    <div class="cat-screen-top">
+      <div class="cat-screen-label">Choose a category to practice</div>
+      <button class="spin-btn" onclick="spinRandom()">🎲 Random Hot Seat</button>
+    </div>
+    <div class="progress-summary">
+      <div class="ps-label">Overall readiness</div>
+      <div class="ps-bar"><div class="ps-barf" id="ps-barf" style="width:0%"></div></div>
+      <div class="ps-pct" id="ps-pct">0%</div>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</div>
+
+<!-- QUESTION -->
+<div class="screen" id="sQ">
+  <div class="q-screen-inner">
+    <button class="q-back" onclick="showCats()">← Back to categories</button>
+    <div class="q-cat-badge">
+      <div class="q-cat-icon" id="qCatIcon"></div>
+      <div class="q-cat-name" id="qCatName"></div>
+      <div class="q-cat-prog" id="qCatProg"></div>
+    </div>
+    <div class="q-card">
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="toggle-row">
+        <button class="info-toggle tip-tog" id="tipToggle" onclick="togglePanel('tip')">
+          💬 Things you might mention
+        </button>
+        <button class="info-toggle fac-tog" id="facToggle" onclick="togglePanel('fac')">
+          📋 Facilitator note
+        </button>
+      </div>
+      <div class="info-panel tip-panel" id="tipPanel">
+        <div class="panel-label">Things you might mention</div>
+        <div class="panel-text" id="tipText"></div>
+      </div>
+      <div class="info-panel fac-panel" id="facPanel">
+        <div class="panel-label">Facilitator note</div>
+        <div class="panel-text" id="facText"></div>
+      </div>
+      <div class="q-actions">
+        <button class="q-btn confident" onclick="markQ('done')">💬 Confident — Good Conversation</button>
+        <button class="q-btn keep-going" onclick="markQ('needs')">🔄 Keep Practicing</button>
+      </div>
+    </div>
+    <div class="q-nav">
+      <button class="q-nav-btn" id="prevBtn" onclick="navQ(-1)">← Prev</button>
+      <div class="q-dots" id="qDots"></div>
+      <button class="q-nav-btn" id="nextBtn" onclick="navQ(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPIN OVERLAY -->
+<div class="spin-overlay" id="spinOverlay">
+  <div class="spin-icon" id="spinIcon"></div>
+  <div class="spin-cat" id="spinCat"></div>
+  <div class="spin-q"  id="spinQ"></div>
+  <button class="spin-go" onclick="goToSpun()">Let's Go →</button>
+</div>
+
+<!-- DONE -->
+<div class="screen" id="sDONE">
+  <div class="done-wrap">
+    <div class="done-emoji">🏆</div>
+    <div class="done-title">All <span>23 Questions</span> Practiced!</div>
+    <div class="done-sub">Your team has talked through every examiner question. That is the Pharr Way.</div>
+    <div class="done-grid" id="doneGrid"></div>
+    <button class="mode-btn primary" style="margin-top:8px;" onclick="showCats()">Review Again</button>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  {
+    id:'mvc', icon:'🌟', name:'Mission, Values & Culture',
+    qs:[
+      {
+        q:"What is the City's mission, and how does your job support it?",
+        tip:"Talk about what the mission means to you, not the exact wording. Then connect it to something real from your day — a situation where you felt like you were delivering on that promise.",
+        fac:"This is a deployment check for the MVV. Examiners want to hear it sound natural — lived, not memorized. If employees can connect the mission to their actual daily work, that's a strong signal. If they freeze or recite, it shows the mission hasn't landed beyond the orientation packet."
+      },
+      {
+        q:"What do the PRIDE values mean in your daily work?",
+        tip:"Pick one or two that feel most relevant to your role and talk about what they actually look like in your day-to-day. A specific moment or habit works better than listing definitions.",
+        fac:"Examiners aren't testing whether employees can define each letter. They're listening for whether values feel real or decorative. A story — even a small one — is more convincing than a definition. Help your team find their own examples before the visit."
+      },
+      {
+        q:"What is the Pharr Way?",
+        tip:"People, Process, and Performance. Talk about what it means in your own words — how it connects to how you and your team work every day. You don't need to sound like a brochure.",
+        fac:"If this conversation feels natural, it signals culture deployment. If employees look blank, it's a gap worth addressing before Oct 20. The Pharr Way should sound like something they actually use — not a concept they've heard about."
+      }
+    ]
+  },
+  {
+    id:'work', icon:'🎯', name:'Your Work & Your Customers',
+    qs:[
+      {
+        q:"Who are your customers, and what do they expect from you?",
+        tip:"Think about the specific people you actually serve — residents, other departments, a particular community group. What do they come to you for? What does a good interaction look like from their side?",
+        fac:"This checks whether customer focus is operationalized or just a concept. Examiners want specificity — 'residents who need building permits and expect a response within 3 business days' is stronger than 'residents.' Help employees name their real customers before the visit."
+      },
+      {
+        q:"How do you know if you are doing a good job?",
+        tip:"Think about what tells you — beyond your gut feeling — that your work is landing. Could be a metric, feedback from a resident, how quickly things get resolved, a measure your team tracks.",
+        fac:"This probes whether performance feedback is visible to employees, not just reported upward. 'My supervisor tells me' is fine but incomplete. Employees who mention a specific indicator — even informally — show that performance is measured at the work level, not just the leadership level."
+      },
+      {
+        q:"What are your department's goals or KPIs, and how is the department doing on them?",
+        tip:"Name at least one goal or metric your team works toward and share what you know about how things are going — green, yellow, behind, improving. You don't need every number, just something real.",
+        fac:"Every employee doesn't need to know the full scorecard — but knowing one or two measures and their current status shows the scorecard is being used, not just reported upward. If this is a gap on your team, share the scorecard before the visit and talk through it together."
+      }
+    ]
+  },
+  {
+    id:'imp', icon:'⚙️', name:'Improvement',
+    qs:[
+      {
+        q:"What is STEP? Have you or your team submitted one?",
+        tip:"STEP stands for Study, Track, Evaluate, Propose — it's how the City formally turns an idea or a problem into a real improvement. If your team has done one, talk about it. If not, talk about something you'd want to improve and how you'd use STEP to get there.",
+        fac:"This checks STEP deployment. Employees should be able to explain STEP in plain language and connect it to something real — either a submission or a potential one. 'I've heard of it' is a weaker signal than 'we used it to fix our inspection process.' Help teams identify their own STEP story before the visit."
+      },
+      {
+        q:"If you have an idea to improve something, what do you do with it?",
+        tip:"Walk through what you'd actually do — who you'd talk to, what process you'd use, how it would get evaluated. The point is that there's a real path for your idea, not just a suggestion box.",
+        fac:"This tests whether employees feel empowered and whether improvement has a clear channel. A strong answer shows ownership — 'I'd bring it to my supervisor and we'd look at submitting a STEP' — versus resignation — 'I'd mention it and hope something happens.' The answer reveals the real culture of improvement, not just the official process."
+      },
+      {
+        q:"What is something that has changed in your department because of employee input?",
+        tip:"Think of a process, a workflow, a tool, or a policy that's different now because someone on your team spoke up or submitted feedback. Even a small change counts.",
+        fac:"This is a Learning check — does improvement actually happen, or just get submitted? Examiners want to hear that the loop closes. If employees struggle to name anything, it may indicate that changes aren't being communicated back to the team, even when they happen. Help your team surface real examples — AES-driven changes, adopted STEPs, adjusted workflows — before the visit."
+      }
+    ]
+  },
+  {
+    id:'comm', icon:'📣', name:'Communication & Leadership',
+    qs:[
+      {
+        q:"How do you find out what is going on in the City?",
+        tip:"Think about all the ways you stay informed — meetings, emails, signage, your supervisor, platforms the City uses. More than one channel means you're not dependent on one source.",
+        fac:"This tests Communication system deployment — whether information reaches employees through multiple channels or only trickles down informally. A strong answer mentions more than one source. A weak answer ('I usually just ask a coworker') signals that formal channels aren't landing consistently."
+      },
+      {
+        q:"How often do you see or talk with your director or City management?",
+        tip:"Talk about what that interaction actually looks like — meetings, conversations in the hallway, formal sessions. You don't have to say it's daily, just that it's real and you know who your leaders are.",
+        fac:"This checks Senior Leader visibility and accessibility. Examiners aren't expecting 'every day' — they're listening for whether leadership is present and recognizable, not names on an org chart. If employees genuinely don't interact with leadership, that's a deployment gap worth addressing before the visit."
+      },
+      {
+        q:"Did you take the employee survey? What happened with the results?",
+        tip:"Talk about whether you participated and what you heard back about the results — what changed, what was shared, how leadership responded. The 'what happened after' part is the key piece.",
+        fac:"The follow-up question — 'what happened with the results' — is where this gets interesting for examiners. If employees only know they took a survey but have no idea what came out of it, that's a Learning gap. Help your team name at least one specific action the City took because of AES feedback before the visit."
+      }
+    ]
+  },
+  {
+    id:'train', icon:'📚', name:'Onboarding, Training & Recognition',
+    qs:[
+      {
+        q:"What was your orientation like?",
+        tip:"Talk about what you remember — what you learned, what stood out, how it prepared you for your role. If you've been here a while, you might reflect on what you wish you'd known early on.",
+        fac:"WorkReady Orientation is a 5-day structured experience covering the MVV, PRIDE values, and Excellence Every Day — not just HR paperwork. Newer employees should be able to describe it as substantive. Longer-tenured employees can speak to how culture is introduced and reinforced. Both are valid answers."
+      },
+      {
+        q:"What training have you had this year?",
+        tip:"Name something specific — a course, a session, a skill you developed. It could be role-specific, Pharr Way, STEP, cybersecurity, a certification — anything that added to how you do your job.",
+        fac:"Pharr invests $937 per FTE annually in training — nearly double the national benchmark. Employees should feel that investment, not just have it on paper. If your team can't name anything off the top of their heads, that's worth a conversation before the visit. Consider reviewing training records together so employees can speak to specifics."
+      },
+      {
+        q:"How does your supervisor give you feedback on your performance?",
+        tip:"Talk about what that actually looks like — formal reviews, check-ins, feedback in the moment. How do you know when you're doing well or when something needs to change?",
+        fac:"Examiners are listening for a culture of ongoing feedback, not just an annual checkbox. Answers that mention both formal (Trackstar performance reviews) and informal (coaching conversations, real-time feedback) signal that the performance management system is working as designed, not just as a compliance step."
+      },
+      {
+        q:"How are employees recognized here?",
+        tip:"Think about moments when you or a colleague felt genuinely recognized — not just formal ceremonies, but day-to-day acknowledgment. What does recognition actually look like in your department?",
+        fac:"Examiners want recognition to sound real and frequent, not ceremonial and rare. STEP Champions, STAR recognition, service awards, and Pathway to Leadership are all valid — but so is a supervisor who consistently acknowledges good work. Help employees find their own recognition story, not just the official program names."
+      }
+    ]
+  },
+  {
+    id:'safe', icon:'🛡️', name:'Safety, Ethics & Security',
+    qs:[
+      {
+        q:"What would you do if you saw a safety hazard?",
+        tip:"Walk through what you'd actually do — who you'd tell, how you'd report it, what you'd expect to happen next. The key is that you'd act, not just be careful around it.",
+        fac:"The answer is simple — report it through the right channel — but what examiners are listening for is ownership. Employees should feel a personal responsibility to act, not just stay out of the way. 'I'd report it to my supervisor and make sure it gets addressed' is the right shape."
+      },
+      {
+        q:"How would you report an ethics concern or suspected fraud?",
+        tip:"You can use the fraud hotline — it's confidential — or go through the Office of Professional and Ethical Standards. You don't have to handle it alone or confront anyone directly.",
+        fac:"Employees should know the fraud hotline exists, that it's confidential, and that reporting in good faith is protected. If employees don't know the channel exists, that's a deployment gap in the ethics system. A matter-of-fact answer here signals a healthy ethics culture — hesitation or uncertainty signals one that needs reinforcement."
+      },
+      {
+        q:"What would you do with a suspicious email?",
+        tip:"Don't click anything. Report it to IT. Delete it. Those three steps are the right answer — and they work whether you're certain it's suspicious or just not sure.",
+        fac:"Pharr reduced its phishing prone rate from 24% to 5% through training and simulations. Employees who answer this confidently show that training landed — not just that they attended it. If employees look uncertain, it's a good signal to run another phishing awareness touchpoint before Oct 20."
+      },
+      {
+        q:"What is your role if there is an emergency?",
+        tip:"Talk about what you know — where to go, who to follow, how to get official information, what your department's plan looks like. You don't need every detail, just that you know where to start.",
+        fac:"Employees don't need to recite the full continuity of operations plan — they need to know their supervisor's role in an emergency, their evacuation procedure, and how to get official City communications during an incident. 'I'd figure it out' is a gap. 'I'd follow my supervisor to our designated area and wait for official updates' is solid."
+      }
+    ]
+  },
+  {
+    id:'cx', icon:'📞', name:'Complaints & Customer Service',
+    qs:[
+      {
+        q:"What do you do when a resident brings you a complaint?",
+        tip:"Walk through what you'd actually do — listen, make sure it's documented, connect them to whoever can help if it's not your area, and make sure it doesn't just disappear. The resident should feel heard.",
+        fac:"Examiners are checking whether customer focus goes beyond a policy statement. A strong answer shows ownership — the employee feels responsible for the resident's experience, even if they route the complaint to someone else. 'I'd tell them to call 311' alone is a weak answer. 'I'd log it and make sure they got a response' is much stronger."
+      },
+      {
+        q:"What happens if you can't resolve it yourself?",
+        tip:"Talk about how you'd escalate it — to your supervisor, through 311, to the right department — and how you'd make sure it actually got resolved rather than just handed off.",
+        fac:"This distinguishes handoff from follow-through. Examiners want to hear that complaints have an owner until they're closed — not just until they're transferred. An employee who says 'I'd pass it along and check back' shows a stronger customer service culture than one who says 'I'd refer them and that'd be it.'"
+      }
+    ]
+  },
+  {
+    id:'plan', icon:'🗺️', name:'Planning',
+    qs:[
+      {
+        q:"Did you take part in a SWOT Day or SMART Day? What came out of it?",
+        tip:"Talk about what your department looked at, what you identified as strengths or opportunities, and whether any of it turned into something — a budget request, a goal, an action item for the year.",
+        fac:"This is an Integration check — does employee participation in planning actually connect to real decisions? A strong answer ties the SWOT Day to something tangible that followed. If employees participated but don't know what came of it, the loop didn't close visibly enough. Help teams trace one specific outcome from their SWOT Day input before the visit."
+      }
+    ]
+  }
+];
+
+var TOTAL_Q = CATS.reduce(function(s,c){return s+c.qs.length;},0);
+var state = {};
+var activeCat = null, activeQIdx = 0;
+var spunCat = null, spunQ = null;
+var tipOpen = false, facOpen = false;
+
+function load(){ try{var s=localStorage.getItem('svr2_state');if(s)state=JSON.parse(s);}catch(e){} }
+function save(){ try{localStorage.setItem('svr2_state',JSON.stringify(state));}catch(e){} }
+function key(catId,idx){ return catId+'_'+idx; }
+function catDone(cat){ return cat.qs.filter(function(_,i){return !!state[key(cat.id,i)];}).length; }
+function totalDone(){ return CATS.reduce(function(s,c){return s+catDone(c);},0); }
+
+// Countdown
+function updateCountdowns(){
+  var now=Date.now();
+  var tv=new Date('2026-09-28T08:00:00')-now;
+  var to=new Date('2026-10-20T08:00:00')-now;
+  function fmt(diff){
+    if(diff<=0)return '🎯 TODAY';
+    var d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000);
+    var m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    return d+'d '+pad(h)+'h '+pad(m)+'m '+pad(s)+'s';
+  }
+  function pad(n){return String(n).padStart(2,'0');}
+  document.getElementById('cd-v').textContent=fmt(tv);
+  document.getElementById('cd-o').textContent=fmt(to);
+}
+setInterval(updateCountdowns,1000); updateCountdowns();
+
+// Navigation
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+function showCats(){ buildCatGrid(); updateOverall(); showScreen('sCATS'); }
+function showTitle(){ showScreen('sTITLE'); }
+
+// Category grid
+function buildCatGrid(){
+  var grid=document.getElementById('catGrid'); grid.innerHTML='';
+  CATS.forEach(function(cat){
+    var done=catDone(cat),tot=cat.qs.length,pct=Math.round(done/tot*100);
+    var allDone=done===tot,someDone=done>0&&!allDone;
+    var tile=document.createElement('div');
+    tile.className='cat-tile'+(allDone?' all-done':someDone?' some-done':'');
+    tile.onclick=function(){openCat(cat.id,0);};
+    tile.innerHTML=
+      '<div class="ct-icon">'+cat.icon+'</div>'+
+      '<div class="ct-name">'+cat.name+'</div>'+
+      '<div class="ct-count">'+done+' / '+tot+' practiced</div>'+
+      '<div class="ct-prog"><div class="ct-progf" style="width:'+pct+'%"></div></div>'+
+      '<div class="ct-status">'+(allDone?'✅':someDone?'🟡':'')+'</div>';
+    grid.appendChild(tile);
+  });
+  var done=totalDone(),pct=Math.round(done/TOTAL_Q*100);
+  document.getElementById('ps-barf').style.width=pct+'%';
+  document.getElementById('ps-pct').textContent=pct+'%';
+}
+
+// Question view
+function openCat(catId,qIdx){
+  activeCat=CATS.find(function(c){return c.id===catId;}); activeQIdx=qIdx;
+  tipOpen=false; facOpen=false;
+  renderQ(); showScreen('sQ');
+}
+function renderQ(){
+  var cat=activeCat,q=cat.qs[activeQIdx];
+  document.getElementById('qCatIcon').textContent=cat.icon;
+  document.getElementById('qCatName').textContent=cat.name;
+  document.getElementById('qCatProg').textContent=catDone(cat)+' / '+cat.qs.length+' practiced';
+  document.getElementById('qNum').textContent='Question '+(activeQIdx+1)+' of '+cat.qs.length;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('tipText').textContent=q.tip;
+  document.getElementById('facText').textContent=q.fac;
+  // reset panels
+  tipOpen=false; facOpen=false;
+  document.getElementById('tipPanel').classList.remove('show');
+  document.getElementById('facPanel').classList.remove('show');
+  document.getElementById('tipToggle').classList.remove('open');
+  document.getElementById('facToggle').classList.remove('open');
+  // dots
+  var dots=document.getElementById('qDots'); dots.innerHTML='';
+  cat.qs.forEach(function(_,i){
+    var d=document.createElement('div');
+    var k=key(cat.id,i);
+    d.className='qdot'+(i===activeQIdx?' current':state[k]==='done'?' done-g':state[k]==='needs'?' done-a':'');
+    dots.appendChild(d);
+  });
+  document.getElementById('prevBtn').style.visibility=activeQIdx>0?'visible':'hidden';
+  document.getElementById('nextBtn').textContent=activeQIdx<cat.qs.length-1?'Next →':'Done ✓';
+  updateOverall();
+}
+
+function togglePanel(which){
+  if(which==='tip'){
+    tipOpen=!tipOpen;
+    document.getElementById('tipPanel').classList.toggle('show',tipOpen);
+    document.getElementById('tipToggle').classList.toggle('open',tipOpen);
+  } else {
+    facOpen=!facOpen;
+    document.getElementById('facPanel').classList.toggle('show',facOpen);
+    document.getElementById('facToggle').classList.toggle('open',facOpen);
+  }
+}
+
+function navQ(dir){
+  if(dir>0){
+    if(activeQIdx<activeCat.qs.length-1){activeQIdx++;renderQ();}
+    else{showCats();checkAllDone();}
+  } else {
+    if(activeQIdx>0){activeQIdx--;renderQ();}
+  }
+}
+function markQ(status){
+  state[key(activeCat.id,activeQIdx)]=status; save(); renderQ();
+  setTimeout(function(){navQ(1);},350);
+}
+
+// Spin
+function spinRandom(){
+  var cat=CATS[Math.floor(Math.random()*CATS.length)];
+  var qIdx=Math.floor(Math.random()*cat.qs.length);
+  spunCat=cat; spunQ=qIdx;
+  document.getElementById('spinIcon').textContent=cat.icon;
+  document.getElementById('spinCat').textContent=cat.name;
+  document.getElementById('spinQ').textContent=cat.qs[qIdx].q;
+  document.getElementById('spinOverlay').classList.add('show');
+}
+function goToSpun(){
+  document.getElementById('spinOverlay').classList.remove('show');
+  openCat(spunCat.id,spunQ);
+}
+
+// Overall
+function updateOverall(){
+  var done=totalDone();
+  document.getElementById('overall-pill').textContent=done+' / '+TOTAL_Q+' practiced';
+}
+function checkAllDone(){
+  if(totalDone()<TOTAL_Q)return;
+  var grid=document.getElementById('doneGrid'); grid.innerHTML='';
+  CATS.forEach(function(cat){
+    var done=catDone(cat),tot=cat.qs.length,pct=Math.round(done/tot*100);
+    var chip=document.createElement('div');
+    chip.className='done-chip '+(pct===100?'all-g':'all-a');
+    chip.innerHTML='<div class="dc-cat">'+cat.icon+' '+cat.name+'</div><div class="dc-pct">'+pct+'%</div>';
+    grid.appendChild(chip);
+  });
+  setTimeout(function(){showScreen('sDONE');},300);
+}
+function resetAll(){
+  if(!confirm('Reset all practice progress?'))return;
+  state={}; try{localStorage.removeItem('svr2_state');}catch(e){}
+  updateOverall(); showCats();
+}
+
+load(); updateOverall();
+</script>
+</body>
+</html>
